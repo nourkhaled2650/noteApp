@@ -8,5 +8,5 @@ export default interface Note {
 
 export interface noteInput {
   title: string;
-  text: string;
+  text?: string;
 }
