@@ -3,18 +3,26 @@ import NoteModel from "./models/noteModel";
 import { Note } from "./component/Note";
 import { NoteDialog } from "./component/NoteDialog";
 import * as notesApi from "./network/note_api";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function App() {
     const [notes, setNotes] = useState<NoteModel[]>([]);
     const [noteDialog, setNoteDialog] = useState(false);
-    const [notToEdit, setNotToEdit] = useState<NoteModel>({ title: "", text: "", _id: "", createdAt: "", updatedAt: "" })
+    const [notToEdit, setNotToEdit] = useState<NoteModel | null>(null)
+    const [noteLoading, setNoteLoading] = useState(true)
+    const [noteLoadingError, setNoteLoadingError] = useState(false)
     useEffect(() => {
         async function loadNotes() {
             try {
+                setNoteLoading(true)
+                setNoteLoadingError(false)
                 const notes = await notesApi.fetchNotes();
                 setNotes(notes);
             } catch (error) {
-                alert(error);
+                setNoteLoadingError(true)
+            }
+            finally {
+                setNoteLoading(false)
             }
         }
         loadNotes();
@@ -24,36 +32,39 @@ function App() {
         <div className="container">
             <button
                 className="addNote"
-                onClick={() => {
-
-                    setNoteDialog((prev) => !prev);
-                }}
-            >
+                onClick={() => { setNoteDialog((prev) => !prev); }}>
                 ✙ Add Note
             </button>
-            <div className="notePad">
-                {notes.map((note) => (
-                    <Note
-                        note={note}
-                        key={note._id}
-                        onDeleteNoteClicked={() => {
-                            setNotes(
-                                notes.filter((existingNote) => existingNote._id != note._id)
-                            );
-                        }}
-                        onEditNoteClicked={() => {
-                            setNotToEdit(note)
-                            setNoteDialog((prev) => !prev);
-                        }}
-                    />
-                ))}
-            </div>
+            {noteLoading && <ClipLoader color="#6cb1e3" size={60} />}
+            {noteLoadingError && <p>Something went wrong. pls refresh the page or try later</p>}
+            {!noteLoading && !noteLoadingError &&
+                <>
+                    {notes.length > 0 ?
+                        <div className="notePad">
+                            {notes.map((note) => (
+                                <Note
+                                    note={note}
+                                    key={note._id}
+                                    onDeleteNoteClicked={() => {
+                                        setNotes(
+                                            notes.filter((existingNote) => existingNote._id != note._id)
+                                        );
+                                    }}
+                                    onEditNoteClicked={() => {
+                                        setNotToEdit(note)
+                                        setNoteDialog((prev) => !prev);
+                                    }}
+                                />
+                            ))}
+                        </div>
+                        : <p>You don't have Notes yet. </p>}
+                </>}
             {noteDialog && (
                 <NoteDialog
                     noteToEdit={notToEdit}
                     onDismiss={() => {
                         setNoteDialog((prev) => !prev)
-                        setNotToEdit({ _id: "", title: "", text: "", createdAt: "", updatedAt: "" })
+                        setNotToEdit(null)
                     }}
                     onNoteSave={(newNote, updated) => {
                         if (updated) {
@@ -62,9 +73,6 @@ function App() {
                         else {
                             setNotes([...notes, newNote]);
                         }
-
-
-
                     }}
                 />
             )}

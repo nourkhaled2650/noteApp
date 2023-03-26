@@ -8,13 +8,16 @@ label {
 }
 
 .popUp {
-  background-color: rgb(11, 12, 12);
-  position: absolute;
-  top: 0;
-
   opacity: 40%;
-  width: 99%;
-  height: 100%;
+  background-color: rgb(11, 12, 12);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .close {
   font-size: 45px;
@@ -59,9 +62,7 @@ label {
   display: flex;
   justify-content: end;
 }
-/* .submit {
-  border-bottom: 1px solid black;
-} */
+
 .addNote {
   width: 125px;
   cursor: pointer;

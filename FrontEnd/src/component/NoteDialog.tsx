@@ -6,7 +6,7 @@ import "./dialogStyle.css";
 interface dialogProps {
     onDismiss: () => void;
     onNoteSave: (note: Note, updated: boolean) => void;
-    noteToEdit?: Note
+    noteToEdit?: Note | null
 }
 export const NoteDialog = ({ onDismiss, onNoteSave, noteToEdit }: dialogProps) => {
 
