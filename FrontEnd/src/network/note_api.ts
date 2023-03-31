@@ -29,6 +29,7 @@ export async function updateNote(
   });
   return response.json();
 }
+
 export async function createNote(input: noteInput): Promise<Note> {
   const response = await fetchData("http://localhost:5000/notes", {
     method: "POST",

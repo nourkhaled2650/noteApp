@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import NoteModel from "../models/note";
 import createHttpError from "http-errors";
 import mongoose from "mongoose";
+
 export const getNotes: RequestHandler = async (req, res, next) => {
   try {
     const notes = await NoteModel.find().exec();
