@@ -1,12 +1,5 @@
 import Note, { noteInput } from "./../models/noteModel";
-const fetchData = async (input: RequestInfo, init?: RequestInit) => {
-  const response = await fetch(input, init);
-  if (response.ok) {
-    return response;
-  } else {
-    throw Error("something went wrong");
-  }
-};
+import { fetchData } from "./fetch";
 
 export async function fetchNotes(): Promise<Note[]> {
   const response = await fetchData("http://localhost:5000/notes", {

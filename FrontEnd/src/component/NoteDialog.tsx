@@ -45,6 +45,7 @@ export const NoteDialog = ({ onDismiss, onNoteSave, noteToEdit }: dialogProps) =
                 onSubmit={handleSubmit((data) => onSubmit(data))}
                 className="formContainer"
             >
+                {/* "update note" "add notes" "login" "signup" */}
                 <div className="header">
                     <h1>{noteToEdit?._id ? "Update Note" : "Add Notes"}</h1>
                     <span
@@ -56,6 +57,7 @@ export const NoteDialog = ({ onDismiss, onNoteSave, noteToEdit }: dialogProps) =
                         &times;
                     </span>
                 </div>
+
                 <div className="formBody">
                     <label htmlFor="title" className="">
                         Title
