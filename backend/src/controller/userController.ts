@@ -54,18 +54,17 @@ export const SignUp: RequestHandler = async (req, res, next) => {
     const passwordHash = await bcrypt.hash(passwordRaw, 10);
 
     //creating new user on DB
-
+    console.log(passwordHash);
     const newUser = await UserModel.create({
       username: username,
       email: email,
       password: passwordHash,
     });
-
+    console.log(newUser);
     req.session.userId = newUser._id;
     //returning the new created user
     res.status(201).json(newUser);
   } catch (error) {
-    console.error(error);
     next(error);
   }
 };

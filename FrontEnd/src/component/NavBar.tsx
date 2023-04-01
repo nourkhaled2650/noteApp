@@ -3,7 +3,7 @@ import "../component/navBar.css"
 
 interface navBarProps {
     authenticated: boolean,
-    username: string,
+    username?: string,
     loginClicked: () => void
     signupClick: () => void
     logoutClicked: () => void

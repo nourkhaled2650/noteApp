@@ -1,8 +1,10 @@
 import { User } from "../models/userModel";
-import { fetchData } from "./fetch";
+import { fetchData } from "./fetchh";
 
 export const getLoggedInUser = async (): Promise<User> => {
-  const response = await fetchData("/users", { method: "GET" });
+  const response = await fetchData("http://localhost:5000/users", {
+    method: "GET",
+  });
   return response.json();
 };
 
@@ -12,7 +14,7 @@ interface SignUpCredentials {
   password: string;
 }
 export const signUp = async (credentials: SignUpCredentials): Promise<User> => {
-  const response = await fetchData("/users/signup", {
+  const response = await fetchData("http://localhost:5000/users/signup", {
     method: "POST",
     headers: { "Content-Type": "application.json" },
     body: JSON.stringify(credentials),
@@ -26,7 +28,7 @@ interface LogInCredentials {
 }
 
 export const logIn = async (credentials: LogInCredentials): Promise<User> => {
-  const response = await fetchData("/users/login", {
+  const response = await fetchData("http://localhost:5000/users/login", {
     method: "POST",
     headers: { "Content-Type": "application.json" },
     body: JSON.stringify(credentials),
@@ -35,7 +37,7 @@ export const logIn = async (credentials: LogInCredentials): Promise<User> => {
 };
 
 export const logOut = async () => {
-  const response = await fetchData("/users/logout", {
+  const response = await fetchData("http://localhost:5000/users/logout", {
     method: "POST",
   });
   return response.json();

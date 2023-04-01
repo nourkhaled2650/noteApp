@@ -1,5 +1,5 @@
 import Note, { noteInput } from "./../models/noteModel";
-import { fetchData } from "./fetch";
+import { fetchData } from "./fetchh";
 
 export async function fetchNotes(): Promise<Note[]> {
   const response = await fetchData("http://localhost:5000/notes", {

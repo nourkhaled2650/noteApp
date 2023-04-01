@@ -10,3 +10,8 @@ export interface noteInput {
   title: string;
   text?: string;
 }
+export interface userInput {
+  username: string;
+  email?: string;
+  password: string;
+}

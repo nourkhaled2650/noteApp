@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import NoteModel from "./models/noteModel";
 import { Note } from "./component/Note";
-import { NoteDialog } from "./component/NoteDialog";
+import { GenericForm } from "./component/GenericForm";
 import { NavBar } from './component/NavBar';
 import * as notesApi from "./network/note_api";
 import * as usersApi from "./network/user_api";
@@ -11,14 +11,16 @@ function App() {
     const [notes, setNotes] = useState<NoteModel[]>([]);
     const [noteDialog, setNoteDialog] = useState(false);
     const [notToEdit, setNotToEdit] = useState<NoteModel | null>(null)
-    const [noteLoading, setNoteLoading] = useState(true)
+    const [noteLoading, setNoteLoading] = useState(false)
     const [noteLoadingError, setNoteLoadingError] = useState(false)
     const [authenticated, setAuthenticated] = useState(false)
     const [userName, setUserName] = useState("")
+    const [formType, setFormType] = useState("")
     useEffect(() => {
         async function userNotes() {
             try {
-                const authuser = await usersApi.getLoggedInUser()
+                const authuser = await usersApi.getLoggedInUser();
+                console.log(authuser.username)
                 if (authuser.username) {
                     setNoteLoading(true)
                     setUserName(authuser.username)
@@ -35,6 +37,8 @@ function App() {
                     }
                 } else {
                     setAuthenticated(false)
+                    setNoteLoading(false)
+
                 }
             } catch (error) {
                 console.error(error)
@@ -48,17 +52,27 @@ function App() {
             <NavBar
                 authenticated={authenticated}
                 username={userName}
-                loginClicked={() => { setNoteDialog(true) }}
-                logoutClicked={() => { setNoteDialog(true) }}
-                signupClick={() => { setNoteDialog(true) }} />
-            <button
+                loginClicked={() => {
+                    setFormType("login")
+                    setNoteDialog((prev) => !prev);
+                }}
+                logoutClicked={() => { }}
+                signupClick={() => {
+                    setFormType("signup")
+                    setNoteDialog((prev) => !prev);
+                }} />
+            {!authenticated && <p>Log In to See Your Notes</p>}
+            {!noteLoading && !noteLoadingError && authenticated && <button
                 className="addNote"
-                onClick={() => { setNoteDialog((prev) => !prev); }}>
+                onClick={() => {
+                    setFormType("add")
+                    setNoteDialog((prev) => !prev);
+                }}>
                 ✙ Add Note
-            </button>
+            </button>}
             {noteLoading && <ClipLoader color="#6cb1e3" size={60} />}
             {noteLoadingError && <p>Something went wrong. pls refresh the page or try later</p>}
-            {!noteLoading && !noteLoadingError && <> {notes.length > 0 ?
+            {!noteLoading && !noteLoadingError && authenticated && <> {notes.length > 0 ?
                 <div className="notePad">
                     {notes.map((note) => (
                         <Note
@@ -70,6 +84,7 @@ function App() {
                                 );
                             }}
                             onEditNoteClicked={() => {
+                                setFormType("edit")
                                 setNotToEdit(note)
                                 setNoteDialog((prev) => !prev);
                             }}
@@ -78,7 +93,8 @@ function App() {
                 </div>
                 : <p>You don't have Notes yet. </p>}
             </>}
-            {noteDialog && (<NoteDialog
+            {noteDialog && (<GenericForm
+                formType={formType}
                 noteToEdit={notToEdit}
                 onDismiss={() => {
                     setNoteDialog((prev) => !prev)
@@ -91,7 +107,10 @@ function App() {
                     else {
                         setNotes([...notes, newNote]);
                     }
-                }}
+                }
+
+                }
+                onAuthentication={(x: boolean) => { setAuthenticated(x) }}
             />
             )}
         </div>
