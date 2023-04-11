@@ -32,6 +32,7 @@ export const getNote: RequestHandler = async (req, res, next) => {
 export const creatNotes: RequestHandler = async (req, res, next) => {
   const title = req.body.title;
   const text = req.body.text;
+  console.log(req.body);
   try {
     if (!title) {
       throw createHttpError(400, "Note must have a title");

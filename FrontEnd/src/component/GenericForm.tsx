@@ -43,14 +43,13 @@ export const GenericForm = ({ onDismiss, onNoteSave, noteToEdit, formType, onAut
 
     const onUserSubmit = async (data: userInput) => {
         try {
-            const pass = data || "dasdsadasd";
-            console.log(pass);
+            // console.log(typeof data.Email)
+
             let response;
-            if (typeof data.email !== 'undefined') {
-                console.log(data)
-                response = await signUp({ username: data.username, email: data.email, password: data.password })
+            if (typeof data.Email !== 'undefined') {
+                response = await signUp({ username: data.Username, email: data.Email, password: data.Password })
             } else {
-                response = await logIn({ username: data.username, password: data.password })
+                response = await logIn({ username: data.Username, password: data.Password })
             }
             onAuthentication(true)
             onDismiss();
@@ -87,7 +86,7 @@ export const GenericForm = ({ onDismiss, onNoteSave, noteToEdit, formType, onAut
                     </div>
                     <div className="formBody">
                         <FormBody
-                            name="Title"
+                            name="title"
                             register={register}
                             registerOptions={{
                                 required: { value: true, message: "Note must have a Title" },
@@ -95,7 +94,7 @@ export const GenericForm = ({ onDismiss, onNoteSave, noteToEdit, formType, onAut
                             error={errors.title}
                         />
                         <FormBody
-                            name="Text"
+                            name="text"
                             register={register}
                             textarea={true}
                         />
@@ -126,7 +125,7 @@ export const GenericForm = ({ onDismiss, onNoteSave, noteToEdit, formType, onAut
                             registerOptions={{
                                 required: { value: true, message: "Username is required" },
                             }}
-                            error={errors2.username}
+                            error={errors2.Username}
                         />
                         {(formType == "signup") ?
                             <FormBody
@@ -135,7 +134,7 @@ export const GenericForm = ({ onDismiss, onNoteSave, noteToEdit, formType, onAut
                                 registerOptions={{
                                     required: { value: true, message: "Email is required" },
                                 }}
-                                error={errors2.email}
+                                error={errors2.Email}
                             />
                             : ""}
                         <FormBody
@@ -144,7 +143,7 @@ export const GenericForm = ({ onDismiss, onNoteSave, noteToEdit, formType, onAut
                             registerOptions={{
                                 required: { value: true, message: "Password is required" },
                             }}
-                            error={errors2.password}
+                            error={errors2.Password}
                             inputType="password" />
                         <div className="footer">
                             {(formType == "signup") ? <input type="submit" value="Sign Up" className="addNote" /> :

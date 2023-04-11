@@ -11,9 +11,14 @@ import MongoStore from "connect-mongo";
 const app = express();
 
 app.use(morgan("dev"));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "PATCH"],
+    credentials: true,
+  })
+);
 app.use(express.json());
-
 app.use(
   session({
     secret: env.SESSION_SECRET,
@@ -21,6 +26,9 @@ app.use(
     saveUninitialized: false,
     rolling: true,
     cookie: {
+      sameSite: false,
+      httpOnly: true,
+      secure: false,
       maxAge: 60 * 1000,
     },
     store: MongoStore.create({

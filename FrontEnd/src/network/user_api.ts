@@ -16,9 +16,11 @@ interface SignUpCredentials {
 export const signUp = async (credentials: SignUpCredentials): Promise<User> => {
   const response = await fetchData("http://localhost:5000/users/signup", {
     method: "POST",
-    headers: { "Content-Type": "application.json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials),
   });
+  console.log(response);
+
   return response.json();
 };
 
@@ -28,10 +30,11 @@ interface LogInCredentials {
 }
 
 export const logIn = async (credentials: LogInCredentials): Promise<User> => {
-  const response = await fetchData("http://localhost:5000/users/login", {
+  const response = await fetch("http://localhost:5000/users/login", {
     method: "POST",
-    headers: { "Content-Type": "application.json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials),
+    credentials: "include",
   });
   return response.json();
 };

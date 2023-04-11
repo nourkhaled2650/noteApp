@@ -5,10 +5,12 @@ import bcrypt from "bcrypt";
 
 export const getAuthUser: RequestHandler = async (req, res, next) => {
   const authuser = req.session.userId;
+
   try {
     if (!authuser) {
       throw createHttpError(401, "user not authenticated");
     }
+    console.log(authuser);
     const user = await UserModel.findById(authuser).select("+email").exec();
     res.status(200).json(user);
   } catch (error) {
@@ -17,11 +19,11 @@ export const getAuthUser: RequestHandler = async (req, res, next) => {
 };
 
 export const SignUp: RequestHandler = async (req, res, next) => {
+  console.log(req.body);
+
   const username = req.body.username;
   const email = req.body.email;
   const passwordRaw = req.body.password;
-  console.log(email);
-
   try {
     //full info validation
     if (!username || !email || !passwordRaw) {
@@ -70,6 +72,7 @@ export const SignUp: RequestHandler = async (req, res, next) => {
 };
 
 export const LogIn: RequestHandler = async (req, res, next) => {
+  //   console.log(req.sessionID);
   const username = req.body.username;
   const password = req.body.password;
   try {
@@ -87,7 +90,9 @@ export const LogIn: RequestHandler = async (req, res, next) => {
       throw createHttpError(401, "Invalid credentials");
     }
     req.session.userId = user._id;
-    res.status(201).json(user);
+    // console.log(req.session.userId);
+    console.log(user);
+    res.send(req.session.userId);
   } catch (error) {
     next(error);
   }

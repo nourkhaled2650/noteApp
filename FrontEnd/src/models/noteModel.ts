@@ -11,7 +11,7 @@ export interface noteInput {
   text?: string;
 }
 export interface userInput {
-  username: string;
-  email?: string;
-  password: string;
+  Username: string;
+  Email?: string;
+  Password: string;
 }

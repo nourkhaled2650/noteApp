@@ -20,11 +20,11 @@ function App() {
         async function userNotes() {
             try {
                 const authuser = await usersApi.getLoggedInUser();
-                console.log(authuser.username)
+                // console.log(authuser.username)
                 if (authuser.username) {
-                    setNoteLoading(true)
-                    setUserName(authuser.username)
                     setAuthenticated(true)
+                    setUserName(authuser.username)
+                    setNoteLoading(true)
                     setNoteLoadingError(false)
                     try {
                         const notes = await notesApi.fetchNotes();
@@ -84,7 +84,7 @@ function App() {
                                 );
                             }}
                             onEditNoteClicked={() => {
-                                setFormType("edit")
+                                setFormType("update")
                                 setNotToEdit(note)
                                 setNoteDialog((prev) => !prev);
                             }}
