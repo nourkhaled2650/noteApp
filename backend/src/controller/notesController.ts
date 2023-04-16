@@ -4,8 +4,9 @@ import createHttpError from "http-errors";
 import mongoose from "mongoose";
 
 export const getNotes: RequestHandler = async (req, res, next) => {
+  const username: string = req.query.username as string;
   try {
-    const notes = await NoteModel.find().exec();
+    const notes = await NoteModel.find({ username: username }).exec();
     res.status(200).json(notes);
   } catch (error) {
     next(error);
@@ -30,6 +31,7 @@ export const getNote: RequestHandler = async (req, res, next) => {
 };
 
 export const creatNotes: RequestHandler = async (req, res, next) => {
+  const username = req.body.username;
   const title = req.body.title;
   const text = req.body.text;
   console.log(req.body);
@@ -37,7 +39,11 @@ export const creatNotes: RequestHandler = async (req, res, next) => {
     if (!title) {
       throw createHttpError(400, "Note must have a title");
     }
-    const newNote = await NoteModel.create({ title: title, text: text });
+    const newNote = await NoteModel.create({
+      title: title,
+      text: text,
+      username: username,
+    });
     res.status(200).json(newNote);
   } catch (error) {
     next(error);

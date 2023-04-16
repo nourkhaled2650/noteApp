@@ -4,6 +4,7 @@ const noteSchema = new Schema(
   {
     title: { type: String, required: true },
     text: { type: String },
+    username: { type: String, required: true },
   },
   { timestamps: true }
 );

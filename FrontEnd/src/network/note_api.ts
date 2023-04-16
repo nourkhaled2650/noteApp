@@ -1,10 +1,17 @@
 import Note, { noteInput } from "./../models/noteModel";
 import { fetchData } from "./fetchh";
 
-export async function fetchNotes(): Promise<Note[]> {
-  const response = await fetchData("http://localhost:5000/notes", {
-    method: "GET",
-  });
+export async function fetchNotes(username: string): Promise<Note[]> {
+  const response = await fetchData(
+    "http://localhost:5000/notes/" + "?username=" + username,
+    {
+      method: "GET",
+      headers: {
+        "content-Type": "application/json",
+      },
+    }
+  );
+
   const notes = await response.json();
   return notes;
 }
@@ -23,13 +30,17 @@ export async function updateNote(
   return response.json();
 }
 
-export async function createNote(input: noteInput): Promise<Note> {
+export async function createNote(
+  note: noteInput,
+  username: string
+): Promise<Note> {
+  note.username = username;
   const response = await fetchData("http://localhost:5000/notes", {
     method: "POST",
     headers: {
       "content-Type": "application/json",
     },
-    body: JSON.stringify(input),
+    body: JSON.stringify(note),
   });
   return response.json();
 }

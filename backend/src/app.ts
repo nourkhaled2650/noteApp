@@ -14,7 +14,7 @@ app.use(morgan("dev"));
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "PATCH"],
+    methods: ["POST", "GET", "DELETE", "PATCH"],
     credentials: true,
   })
 );
@@ -27,9 +27,9 @@ app.use(
     rolling: true,
     cookie: {
       sameSite: false,
-      httpOnly: true,
-      secure: false,
-      maxAge: 60 * 1000,
+      httpOnly: true, //cookies can be accessed with http only
+      secure: false, // cookies sent with https
+      maxAge: 60 * 1000 * 1000,
     },
     store: MongoStore.create({
       mongoUrl: env.MONGO_CONNECT_STRING,

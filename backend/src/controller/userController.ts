@@ -10,8 +10,7 @@ export const getAuthUser: RequestHandler = async (req, res, next) => {
     if (!authuser) {
       throw createHttpError(401, "user not authenticated");
     }
-    console.log(authuser);
-    const user = await UserModel.findById(authuser).select("+email").exec();
+    const user = await UserModel.findById(authuser);
     res.status(200).json(user);
   } catch (error) {
     next(error);
@@ -90,8 +89,6 @@ export const LogIn: RequestHandler = async (req, res, next) => {
       throw createHttpError(401, "Invalid credentials");
     }
     req.session.userId = user._id;
-    // console.log(req.session.userId);
-    console.log(user);
     res.send(req.session.userId);
   } catch (error) {
     next(error);
@@ -103,7 +100,8 @@ export const Logout: RequestHandler = async (req, res, next) => {
     if (error) {
       next(error);
     } else {
-      res.sendStatus(200);
+      res.clearCookie("connect.sid", { domain: "localhost", path: "/" });
+      res.send("session destroied");
     }
   });
 };

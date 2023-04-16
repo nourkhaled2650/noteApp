@@ -7,46 +7,45 @@ import * as notesApi from "./network/note_api";
 import * as usersApi from "./network/user_api";
 import ClipLoader from "react-spinners/ClipLoader";
 
+
 function App() {
     const [notes, setNotes] = useState<NoteModel[]>([]);
     const [noteDialog, setNoteDialog] = useState(false);
-    const [notToEdit, setNotToEdit] = useState<NoteModel | null>(null)
-    const [noteLoading, setNoteLoading] = useState(false)
+    const [noteToEdit, setNotToEdit] = useState<NoteModel | null>(null)
+    const [noteLoading, setNoteLoading] = useState(true)
     const [noteLoadingError, setNoteLoadingError] = useState(false)
-    const [authenticated, setAuthenticated] = useState(false)
+    const [authenticated, setAuthenticated] = useState(true)
     const [userName, setUserName] = useState("")
     const [formType, setFormType] = useState("")
     useEffect(() => {
         async function userNotes() {
             try {
                 const authuser = await usersApi.getLoggedInUser();
-                // console.log(authuser.username)
-                if (authuser.username) {
-                    setAuthenticated(true)
-                    setUserName(authuser.username)
-                    setNoteLoading(true)
-                    setNoteLoadingError(false)
-                    try {
-                        const notes = await notesApi.fetchNotes();
-                        setNotes(notes);
-                    } catch (error) {
-                        setNoteLoadingError(true)
-                    }
-                    finally {
-                        setNoteLoading(false)
-                    }
-                } else {
-                    setAuthenticated(false)
+                setUserName(authuser.username)
+                setAuthenticated(true)
+                setNoteLoading(true)
+                setNoteLoadingError(false)
+                try {
+                    const notes = await notesApi.fetchNotes(authuser.username);
+                    setNotes(notes);
+                } catch (error) {
+                    setNoteLoadingError(true)
+                }
+                finally {
                     setNoteLoading(false)
-
                 }
             } catch (error) {
-                console.error(error)
+                setAuthenticated(false)
+                setNoteLoading(false)
             }
-
         }
+        //didmount
         userNotes();
-    }, []);
+        //cleanup
+        return () => {
+            setNotes([])
+        }
+    }, [authenticated]); //didupdate
     return (
         <div className="container">
             <NavBar
@@ -56,7 +55,10 @@ function App() {
                     setFormType("login")
                     setNoteDialog((prev) => !prev);
                 }}
-                logoutClicked={() => { }}
+                logoutClicked={async () => {
+                    await usersApi.logOut();
+                    setAuthenticated(false);
+                }}
                 signupClick={() => {
                     setFormType("signup")
                     setNoteDialog((prev) => !prev);
@@ -95,7 +97,7 @@ function App() {
             </>}
             {noteDialog && (<GenericForm
                 formType={formType}
-                noteToEdit={notToEdit}
+                noteToEdit={noteToEdit}
                 onDismiss={() => {
                     setNoteDialog((prev) => !prev)
                     setNotToEdit(null)
@@ -110,7 +112,9 @@ function App() {
                 }
 
                 }
-                onAuthentication={(x: boolean) => { setAuthenticated(x) }}
+                onAuthentication={(x: boolean) => {
+                    setAuthenticated(x)
+                }}
             />
             )}
         </div>

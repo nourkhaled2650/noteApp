@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import Note, { noteInput, userInput } from "../models/noteModel";
 import { createNote, updateNote } from "../network/note_api";
-import { logIn, signUp } from "../network/user_api";
+import { getLoggedInUser, logIn, signUp } from "../network/user_api";
 import "./dialogStyle.css";
 import { FormTitle } from "./FormTitle";
 import { FormBody } from "./FormBody";
@@ -26,9 +26,10 @@ export const GenericForm = ({ onDismiss, onNoteSave, noteToEdit, formType, onAut
     //note onsubmit
     const onNoteSubmit = async (data: noteInput) => {
         try {
+            const user = await getLoggedInUser();
             let response;
             if (!noteToEdit?._id) {
-                response = await createNote(data);
+                response = await createNote(data, user.username);
                 onNoteSave(response, false);
             } else {
                 const response = await updateNote(data, noteToEdit._id)
@@ -43,8 +44,6 @@ export const GenericForm = ({ onDismiss, onNoteSave, noteToEdit, formType, onAut
 
     const onUserSubmit = async (data: userInput) => {
         try {
-            // console.log(typeof data.Email)
-
             let response;
             if (typeof data.Email !== 'undefined') {
                 response = await signUp({ username: data.Username, email: data.Email, password: data.Password })

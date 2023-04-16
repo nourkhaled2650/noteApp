@@ -21,6 +21,7 @@ export const Note = ({ note, onDeleteNoteClicked, onEditNoteClicked }: noteProps
                     className="trashBin"
                     onClick={async (e) => {
                         e.stopPropagation();
+                        console.log(note._id);
                         await deleteNote(note._id);
                         onDeleteNoteClicked(note._id);
 
