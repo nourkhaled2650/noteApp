@@ -1,8 +1,10 @@
 #used techs
+-node
 -typescript
 -express
 -react
 -MongoDB
+-Tailwind
 # noteApp
 to run the app
 - navigate to the BackEnd folder and run these scripts "npm i" then "npm start"
@@ -11,12 +13,6 @@ to run the app
 - sign up
 - login
 - add note
-- edit a note
+- update a note
 - delete a note
-#used technologies
-  -node
-  -TS
-  -Express.js
-  -React
-  -Tailwind
-  -MongoDB
+
