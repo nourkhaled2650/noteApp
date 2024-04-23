@@ -13,3 +13,10 @@ to run the app
 - add note
 - edit a note
 - delete a note
+#used technologies
+  -node
+  -TS
+  -Express.js
+  -React
+  -Tailwind
+  -MongoDB
