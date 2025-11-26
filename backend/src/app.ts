@@ -13,7 +13,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "http://localhost",
+    origin: "http://63.176.178.151",
     methods: ["POST", "GET", "DELETE", "PATCH"],
     credentials: true,
   })
