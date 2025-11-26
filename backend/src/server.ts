@@ -5,7 +5,7 @@ import env from "./util/validatenv";
 const port = env.PORT;
 
 mongoose
-  .connect(env.MONGO_CONNECT_STRING)
+  .connect(env.MONGO_URI)
   .then(() => {
     console.log("mongos connected");
     app.listen(port, () => {

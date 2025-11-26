@@ -13,7 +13,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost",
     methods: ["POST", "GET", "DELETE", "PATCH"],
     credentials: true,
   })
@@ -32,7 +32,7 @@ app.use(
       maxAge: 60 * 1000 * 1000,
     },
     store: MongoStore.create({
-      mongoUrl: env.MONGO_CONNECT_STRING,
+      mongoUrl: env.MONGO_URI,
     }),
   })
 );

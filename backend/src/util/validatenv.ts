@@ -1,7 +1,7 @@
 import { cleanEnv, port, str } from "envalid";
 
 export default cleanEnv(process.env, {
-  MONGO_CONNECT_STRING: str(),
+  MONGO_URI: str(),
   PORT: port(),
   SESSION_SECRET: str(),
 });
